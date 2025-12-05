@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presensi & Notulen OSIS SMK Cibitung 1</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .header {
+            background-color: #f49e4c;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        .main {
+            padding: 20px;
+        }
+        .section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
+        }
+        .hidden {
+            display: none;
+        }
+        textarea {
+            width: 100%;
+            min-height: 90px;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+        input:disabled, textarea:disabled {
+            background-color: #eee;
+        }
+        .btn {
+            padding: 12px 18px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+        .btn-primary {
+            background-color: #f49e4c;
+            color: white;
+        }
+        .btn-secondary {
+            background-color: #ccc;
+        }
+        .admin-notice {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+        .admin-notice.edit-mode {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .admin-notice.view-mode {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+        .participant-item, .decision-item {
+            display: flex;
+            align-items: flex-start;
+            margin: 6px 0;
+        }
+        .participant-bullet {
+            width: 10px;
+            height: 10px;
+            background-color: #f49e4c;
+            border-radius: 50%;
+            margin-right: 10px;
+            margin-top: 5px;
+        }
+        .decision-number {
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        .role-selection {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .role-option {
+            flex: 1;
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .role-option.active {
+            background-color: #f49e4c;
+            color: white;
+            border-color: #f49e4c;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =======================
+         LOGIN PAGE
+    ======================== -->
+    <div id="loginPage" class="main section">
+        <h2>Login Sistem OSIS</h2>
+
+        <div class="role-selection">
+            <div class="role-option active" data-role="admin">Admin</div>
+            <div class="role-option" data-role="user">User</div>
+        </div>
+
+        <form id="loginForm">
+            <label>Username:</label>
+            <input type="text" id="username" required>
+
+            <label>Password:</label>
+            <input type="password" id="password" required>
+
+            <p id="loginError" class="hidden" style="color:red; margin-top:10px;"></p>
+
+            <button class="btn btn-primary" id="loginBtn">Masuk</button>
+        </form>
+    </div>
+
+    <!-- =======================
+         DASHBOARD
+    ======================== -->
+    <div id="dashboardPage" class="hidden">
+
+        <div class="header">
+            <h2>Presensi & Notulen OSIS SMK Cibitung 1</h2>
+        </div>
+
+        <div class="main">
+
+            <!-- USER INFO -->
+            <div class="section">
+                <p><strong>Nama:</strong> <span id="userName"></span></p>
+                <p><strong>Role:</strong> <span id="userRole"></span></p>
+                <button class="btn btn-secondary" onclick="logout()">Logout</button>
+            </div>
+
+            <!-- NOTICE -->
+            <div id="accessNotice" class="admin-notice"></div>
+
+            <!-- IDENTITAS RAPAT -->
+            <div class="section">
+                <h3>Identitas Rapat</h3>
+
+                <label for="meetingId">ID Rapat</label>
+                <input id="meetingId" type="text" disabled>
+
+                <label for="meetingDate">Tanggal</label>
+                <input id="meetingDate" type="date" disabled>
+
+                <label for="meetingTime">Waktu</label>
+                <input id="meetingTime" type="time" disabled>
+
+                <label for="meetingLocation">Tempat</label>
+                <input id="meetingLocation" type="text" disabled>
+
+                <label for="meetingAgenda">Agenda</label>
+                <textarea id="meetingAgenda" disabled></textarea>
+            </div>
+
+            <!-- PESERTA -->
+            <div class="section">
+                <h3>Daftar Peserta</h3>
+
+                <div id="participantsList"></div>
+
+                <div id="participantsEdit" class="hidden">
+                    <textarea id="participantsText" disabled></textarea>
+                </div>
+            </div>
+
+            <!-- KEPUTUSAN -->
+            <div class="section">
+                <h3>Hasil & Keputusan Rapat</h3>
+
+                <div id="decisionsList"></div>
+
+                <div id="decisionsEdit" class="hidden">
+                    <textarea id="decisionsText" disabled></textarea>
+                </div>
+            </div>
+
+            <!-- ACTION BUTTONS -->
+            <div class="section">
+                <button id="editBtn" class="btn btn-primary hidden" onclick="toggleEditMode()">Edit</button>
+                <button id="saveBtn" class="btn btn-primary hidden" onclick="saveChanges()">Simpan</button>
+                <button id="cancelBtn" class="btn btn-secondary hidden" onclick="cancelEdit()">Batal</button>
+
+                <p id="editModeIndicator" class="hidden" style="color:#856404; font-size:14px;">
+                    Mode edit aktif
+                </p>
+
+                <button class="btn btn-primary" onclick="printNotulen()">Cetak</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- =======================
+         SCRIPT LOGIC (SUDAH DIPERBAIKI)
+    ======================== -->
+    <script>
+        let currentUser = null;
+        let isEditMode = false;
+        let originalData = {};
+
+        document.addEventListener("DOMContentLoaded", () => {
+            setupRoleSelector();
+            loadNotulenData();
+            loadUser();
+            document.getElementById("loginForm").addEventListener("submit", handleLogin);
+        });
+
+        function setupRoleSelector() {
+            const options = document.querySelectorAll(".role-option");
+            options.forEach(option => {
+                option.addEventListener("click", () => {
+                    options.forEach(o => o.classList.remove("active"));
+                    option.classList.add("active");
+                });
+            });
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            const role = document.querySelector(".role-option.active").dataset.role;
+            const error = document.getElementById("loginError");
+
+            if (role === "admin" && username === "admin" && password === "admin123") {
+                currentUser = { name: "Administrator", role: "admin", canEdit: true };
+            } else if (role === "user" && username === "user" && password === "user123") {
+                currentUser = { name: "User OSIS", role: "user", canEdit: false };
+            } else {
+                error.classList.remove("hidden");
+                error.textContent = "Login gagal! Periksa username, password, dan role.";
+                return;
+            }
+
+            localStorage.setItem("userData", JSON.stringify(currentUser));
+            updateUserDisplay();
+            showDashboardPage();
+        }
+
+        function logout() {
+            localStorage.removeItem("userData");
+            showLoginPage();
+        }
+
+        function loadUser() {
+            const data = localStorage.getItem("userData");
+            if (!data) return;
+
+            currentUser = JSON.parse(data);
+            updateUserDisplay();
+            showDashboardPage();
+        }
+
+        function updateUserDisplay() {
+            if (!currentUser) return;
+
+            document.getElementById("userName").textContent = currentUser.name;
+            document.getElementById("userRole").textContent = 
+                currentUser.role === "admin" ? "Administrator" : "User";
+
+            const notice = document.getElementById("accessNotice");
+            const editBtn = document.getElementById("editBtn");
+
+            if (currentUser.canEdit) {
+                notice.innerHTML = "<strong>Mode Admin:</strong> Anda dapat mengedit notulen.";
+                notice.className = "admin-notice edit-mode";
+                editBtn.classList.remove("hidden");
+            } else {
+                notice.innerHTML = "<strong>Mode Tampilan:</strong> Anda hanya dapat melihat.";
+                notice.className = "admin-notice view-mode";
+                editBtn.classList.add("hidden");
+            }
+        }
+
+        function showLoginPage() {
+            loginPage.classList.remove("hidden");
+            dashboardPage.classList.add("hidden");
+        }
+
+        function showDashboardPage() {
+            loginPage.classList.add("hidden");
+            dashboardPage.classList.remove("hidden");
+        }
+
+        function toggleEditMode() {
+            if (!currentUser?.canEdit) return;
+
+            isEditMode = true;
+
+            originalData = {
+                meetingId: meetingId.value,
+                meetingDate: meetingDate.value,
+                meetingTime: meetingTime.value,
+                meetingLocation: meetingLocation.value,
+                meetingAgenda: meetingAgenda.value,
+                participants: participantsText.value,
+                decisions: decisionsText.value
+            };
+
+            enableInputs(true);
+
+            participantsList.classList.add("hidden");
+            participantsEdit.classList.remove("hidden");
+            decisionsList.classList.add("hidden");
+            decisionsEdit.classList.remove("hidden");
+
+            editBtn.classList.add("hidden");
+            saveBtn.classList.remove("hidden");
+            cancelBtn.classList.remove("hidden");
+            editModeIndicator.classList.remove("hidden");
+        }
+
+        function saveChanges() {
+            const participants = participantsText.value.split("\n").filter(x => x.trim());
+            const decisions = decisionsText.value.split("\n").filter(x => x.trim());
+
+            participantsList.innerHTML = participants
+                .map(p => `<div class='participant-item'><div class='participant-bullet'></div>${p}</div>`)
+                .join("");
+
+            decisionsList.innerHTML = decisions
+                .map((d, i) => `<div class='decision-item'><div class='decision-number'>${i+1}</div>${d}</div>`)
+                .join("");
+
+            localStorage.setItem("notulenData", JSON.stringify({
+                meetingId: meetingId.value,
+                meetingDate: meetingDate.value,
+                meetingTime: meetingTime.value,
+                meetingLocation: meetingLocation.value,
+                meetingAgenda: meetingAgenda.value,
+                participants,
+                decisions
+            }));
+
+            exitEditMode();
+            alert("✔ Perubahan berhasil disimpan!");
+        }
+
+        function cancelEdit() {
+            if (!confirm("Batalkan perubahan?")) return;
+
+            meetingId.value = originalData.meetingId;
+            meetingDate.value = originalData.meetingDate;
+            meetingTime.value = originalData.meetingTime;
+            meetingLocation.value = originalData.meetingLocation;
+            meetingAgenda.value = originalData.meetingAgenda;
+            participantsText.value = originalData.participants;
+            decisionsText.value = originalData.decisions;
+
+            exitEditMode();
+        }
+
+        function exitEditMode() {
+            isEditMode = false;
+            enableInputs(false);
+
+            participantsList.classList.remove("hidden");
+            participantsEdit.classList.add("hidden");
+            decisionsList.classList.remove("hidden");
+            decisionsEdit.classList.add("hidden");
+
+            if (currentUser?.canEdit) editBtn.classList.remove("hidden");
+            saveBtn.classList.add("hidden");
+            cancelBtn.classList.add("hidden");
+            editModeIndicator.classList.add("hidden");
+        }
+
+        function enableInputs(isEnabled) {
+            [meetingId, meetingDate, meetingTime, meetingLocation, meetingAgenda, participantsText, decisionsText]
+                .forEach(el => el.disabled = !isEnabled);
+        }
+
+        function loadNotulenData() {
+            const saved = localStorage.getItem("notulenData");
+            if (!saved) return;
+
+            const data = JSON.parse(saved);
+
+            meetingId.value = data.meetingId;
+            meetingDate.value = data.meetingDate;
+            meetingTime.value = data.meetingTime;
+            meetingLocation.value = data.meetingLocation;
+            meetingAgenda.value = data.meetingAgenda;
+
+            participantsText.value = data.participants.join("\n");
+            decisionsText.value = data.decisions.join("\n");
+
+            participantsList.innerHTML = data.participants
+                .map(p => `<div class='participant-item'><div class='participant-bullet'></div>${p}</div>`)
+                .join("");
+
+            decisionsList.innerHTML = data.decisions
+                .map((d, i) => `<div class='decision-item'><div class='decision-number'>${i+1}</div>${d}</div>`)
+                .join("");
+        }
+
+        function printNotulen() {
+            const participants = participantsList.innerText.split("\n");
+            const decisions = decisionsList.innerText.split("\n");
+
+            const win = window.open("", "_blank");
+            win.document.write(`
+                <html>
+                <body style="font-family:Arial; margin:40px">
+                    <h2>Notulen Rapat OSIS</h2>
+
+                    <p><b>ID:</b> ${meetingId.value}</p>
+                    <p><b>Tanggal:</b> ${meetingDate.value}</p>
+                    <p><b>Waktu:</b> ${meetingTime.value}</p>
+                    <p><b>Tempat:</b> ${meetingLocation.value}</p>
+                    <p><b>Agenda:</b> ${meetingAgenda.value}</p>
+
+                    <h3>Peserta</h3>
+                    ${participants.map(p => "• " + p + "<br>").join("")}
+
+                    <h3>Keputusan</h3>
+                    ${decisions.map((d, i) => (i+1) + ". " + d + "<br>").join("")}
+                </body>
+                </html>
+            `);
+
+            win.document.close();
+            win.print();
+        }
+    </script>
+
+</body>
+</html>

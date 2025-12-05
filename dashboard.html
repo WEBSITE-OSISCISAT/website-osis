@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=2.0">
+    <title>CISAT NIHH BOSSS!!!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+            color: white;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .menu-btn {
+            background: none;
+            border: none;
+            color: white;
+            padding: 0.5rem;
+            cursor: pointer;
+            border-radius: 0.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .menu-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .logo-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .logo-small {
+            width: 48px;
+            height: 48px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1e3a8a;
+            font-weight: bold;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 300px;
+            height: 100vh;
+            background: white;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            transition: left 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .sidebar.active {
+            left: 0;
+        }
+        
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+        
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .sidebar-header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1e3a8a;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .user-details h3 {
+            margin-bottom: 0.25rem;
+        }
+        
+        .user-details p {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+        
+        .sidebar-menu {
+            padding: 1rem 0;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            color: #374151;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+        
+        .menu-item:hover {
+            background: #f3f4f6;
+            border-left-color: #3b82f6;
+        }
+        
+        .menu-icon {
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+        }
+        
+        .main-content {
+            padding: 2rem 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .welcome {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .welcome h2 {
+            font-size: 2rem;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+        
+        .welcome p {
+            color: #6b7280;
+            font-size: 1.1rem;
+        }
+        
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .menu-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #f3f4f6;
+        }
+        
+        .menu-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .menu-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .menu-icon-large {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .icon-red { background: #ef4444; }
+        .icon-blue { background: #3b82f6; }
+        .icon-green { background: #10b981; }
+        
+        .menu-info h3 {
+            font-size: 1.2rem;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+        
+        .menu-info p {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+        
+        .menu-footer {
+            border-top: 1px solid #f3f4f6;
+            padding-top: 1rem;
+            font-size: 0.8rem;
+            color: #9ca3af;
+            text-align: center;
+        }
+        
+        .info-section {
+            background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%);
+            border: 1px solid #bfdbfe;
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+        
+        .info-section h3 {
+            color: #1e40af;
+            margin-bottom: 1rem;
+        }
+        
+        .info-section p {
+            color: #1e40af;
+            line-height: 1.6;
+        }
+        
+        @media (max-width: 768px) {
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .welcome h2 {
+                font-size: 1.5rem;
+            }
+            
+            .main-content {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    
+   
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="user-avatar" id="userAvatar">U</div>
+            <div class="user-details">
+                <h3 id="userName">Demo User</h3>
+                <p id="userId">ID: DEMO001</p>
+            </div>
+        </div>
+        
+        <nav class="sidebar-menu">
+            <a href="#" class="menu-item" onclick="window.open('https://whatsapp.com/channel/0029VbB4rwKHAdNVq9vaeJ3t', '_blank')">
+                <span class="menu-icon">💬</span>
+                <span>Saluran WhatsApp</span>
+            </a>
+            
+            <a href="#" class="menu-item" onclick="window.open('https://www.instagram.com/osis_smkcibitung1?igsh=MXBxZG0ycTdpenJkOA==', '_blank')">
+                <span class="menu-icon">📸</span>
+                <span>Instagram OSIS</span>
+            </a>
+            
+            <a href="#" class="menu-item" onclick="window.location.href='loginpage.html'">
+                <span class="menu-icon">🚪</span>
+                <span>Logout</span>
+                
+            </a>
+        </nav>
+    </div>
+
+    <header class="header">
+    <div class="header-content">
+        <button class="menu-btn" id="menuBtn" onclick="toggleSidebar()">☰</button>
+        
+        <div class="logo-title">
+            <img class="logo-header" src="logoocis.png" alt="Logo OSIS">
+            <h1>OSIS SMK CIBITUNG 1</h1>
+        </div>
+
+        <div style="width: 40px;"></div>
+    </div>
+</header>
+
+
+    <main class="main-content">
+        <div class="welcome">
+            <h2 id="welcomeText">ADMIN NIH</h2>
+            <p>Kelola kegiatan OSIS SMK Cibitung 1 dengan mudah</p>
+        </div>
+
+        
+        <div class="menu-grid">
+            <div class="menu-card" onclick="window.location.href='agendakegiatan.html'">
+                <div class="menu-header">
+                    <div class="menu-icon-large icon-red">📅</div>
+                    <div class="menu-info">
+                        <h3>AGENDA KEGIATAN</h3>
+                        <p>Lihat jadwal dan agenda kegiatan OSIS</p>
+                    </div>
+                </div>
+                <div class="menu-footer">
+                    Klik untuk membuka
+                </div>
+            </div>
+
+            <div class="menu-card" onclick="window.location.href='rapatkoordinasi.html'">
+                <div class="menu-header">
+                    <div class="menu-icon-large icon-blue">📢</div>
+                    <div class="menu-info">
+                        <h3>RAPAT KOORDINASI</h3>
+                        <p>Kelola rapat dan koordinasi organisasi</p>
+                    </div>
+                </div>
+                <div class="menu-footer">
+                    Klik untuk membuka
+                </div>
+            </div>
+
+            <div class="menu-card" onclick="handleMenu('Evaluasi')">
+                <div class="menu-header">
+                    <div class="menu-icon-large icon-green">📋</div>
+                    <div class="menu-info">
+                        <h3>EVALUASI</h3>
+                        <p>Evaluasi kegiatan dan kinerja organisasi</p>
+                    </div>
+                </div>
+                <div class="menu-footer">
+                    Klik untuk membuka
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="info-section">
+            <h3>Tentang Sistem OSIS</h3>
+            <p>Sistem informasi organisasi siswa yang membantu mengelola kegiatan, koordinasi, dan evaluasi dengan lebih efisien dan terorganisir.</p>
+            <a href="#" class="link" onclick="window.open('https:https://www.instagram.com/shinzzei?igsh=N2xpbnNuM2s1ODBz', '_blank')">
+                <span>follow my ig</span>
+            <span class="menu-icon">🤗</span>
+            </a>
+        </div>
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+        
+        
+        document.getElementById('sidebarOverlay').addEventListener('click', function() {
+            toggleSidebar();
+        });
+        
+        function handleMenu(menuName) {
+            alert('Membuka ' + menuName + '. halaman akan segera hadi!');
+        }
+        
+        function logout() {
+            if(confirm('ingin keluar?')) {
+                localStorage.removeItem('userData');
+                window.location.href = 'login-simple.html';
+            }
+        }
+        
+        
+        function loadUser() {
+    const userData = localStorage.getItem('userData');
+
+    if (!userData) {
+        alert("Silakan login dulu");
+        window.location.href = "loginpage.html";
+        return;
+    }
+
+    const user = JSON.parse(userData);
+
+    // TAMPILKAN DATA USER
+    document.getElementById('userName').textContent = user.nama;
+    document.getElementById('userId').textContent = 'ID: ' + user.idAnggota;
+    document.getElementById('userAvatar').textContent = user.nama.charAt(0).toUpperCase();
+
+    // CEK ADMIN KHUSUS (KAMU)
+    if (user.username === "nia") {
+        document.getElementById('welcomeText').textContent = 'SELAMAT DATANG ADMIN ' + user.nama.toUpperCase() + ' 👑';
+    } else {
+        document.getElementById('welcomeText').textContent = 'Halo, ' + user.nama + ' (Anggota)';
+        
+        alert("Anda bukan admin!");
+        window.location.href = "loginpage.html";
+    }
+}
+    </script>
+</body>
+</html>
