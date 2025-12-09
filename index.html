@@ -118,18 +118,10 @@
         ];
 
         
-        const user = users.find(u => u.username === username && u.password === password);
-
-        if(user) {
-            
-            localStorage.setItem('userData', JSON.stringify({
-    nama: user.nama,
-    idAnggota: user.idAnggota,
-    username: user.username,
-    role: user.role || "anggota"
+       
 }));
 
-            window.location.href = 'dashboard.html';
+            window.location.href ='dashboard.html';
         } else {
             errorMsg.style.display = 'block';
         }
@@ -138,5 +130,6 @@
     
 </body>
 </html>
+
 
 
