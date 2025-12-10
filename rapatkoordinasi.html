@@ -116,8 +116,8 @@
         <h2>Login Sistem OSIS</h2>
 
         <div class="role-selection">
-            <div class="role-option active" data-role="admin">Admin</div>
-            <div class="role-option" data-role="user">User</div>
+            <div class="role-option active" data-role="admin">BPH</div>
+            <div class="role-option" data-role="user">ANGGOTA OSIS</div>
         </div>
 
         <form id="loginForm">
@@ -245,10 +245,10 @@
             const role = document.querySelector(".role-option.active").dataset.role;
             const error = document.getElementById("loginError");
 
-            if (role === "admin" && username === "admin" && password === "admin123") {
-                currentUser = { name: "Administrator", role: "admin", canEdit: true };
-            } else if (role === "user" && username === "user" && password === "user123") {
-                currentUser = { name: "User OSIS", role: "user", canEdit: false };
+            if (role === "admin" && username === "REZI" && password === "rejisigma") {
+                currentUser = { name: "BPH OSIS", role: "admin", canEdit: true };
+            } else if (role === "user" && username === "fairuz" && password === "falzzgcsz125") {
+                currentUser = { name: "ANGGOTA OSIS", role: "user", canEdit: false };
             } else {
                 error.classList.remove("hidden");
                 error.textContent = "Login gagal! Periksa username, password, dan role.";
@@ -449,3 +449,4 @@
 
 </body>
 </html>
+
