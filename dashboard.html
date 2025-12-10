@@ -3,8 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=2.0">
-    <title>CISAT NIHH BOSSS!!!</title>
+    <title>website osis cisat</title>
     <style>
+        .center-text {
+    text-align: center;
+    color: white;
+}
+.header-content h1, 
+.header-content h2, 
+.header-content p {
+    margin: 0;
+ }
+
         * {
             margin: 0;
             padding: 0;
@@ -65,7 +75,6 @@
             font-weight: bold;
         }
         
-        /* Sidebar */
         .sidebar {
             position: fixed;
             top: 0;
@@ -311,17 +320,23 @@
     </div>
 
     <header class="header">
-    <div class="header-content">
-        <button class="menu-btn" id="menuBtn" onclick="toggleSidebar()">☰</button>
+    <div class="header-content" style="display: grid; grid-template-columns: 50px 1fr 80px; align-items: center;">
         
-        <div class="logo-title">
-            <img class="logo-header" src="logoocis.png" alt="Logo OSIS">
+       
+        <button class="menu-btn" id="menuBtn" onclick="toggleSidebar()">☰</button>
+
+       
+        <div class="center-text">
             <h1>OSIS SMK CIBITUNG 1</h1>
+            <p>Kelola kegiatan OSIS SMK Cibitung 1 dengan mudah</p>
         </div>
 
-        <div style="width: 40px;"></div>
+        <!-- Logo (kanan) -->
+        <img src="logoocis.png" alt="Logo OSIS" style="width: 55px; justify-self: end;">
     </div>
 </header>
+
+
 
 
     <main class="main-content">
@@ -358,7 +373,7 @@
                 </div>
             </div>
 
-            <div class="menu-card" onclick="handleMenu('Evaluasi')">
+            <div class="menu-card" onclick="window.location.href='evaluasi.html'">
                 <div class="menu-header">
                     <div class="menu-icon-large icon-green">📋</div>
                     <div class="menu-info">
@@ -376,10 +391,9 @@
         <div class="info-section">
             <h3>Tentang Sistem OSIS</h3>
             <p>Sistem informasi organisasi siswa yang membantu mengelola kegiatan, koordinasi, dan evaluasi dengan lebih efisien dan terorganisir.</p>
-            <a href="#" class="link" onclick="window.open('https:https://www.instagram.com/shinzzei?igsh=N2xpbnNuM2s1ODBz', '_blank')">
-                <span>follow my ig</span>
-            <span class="menu-icon">🤗</span>
-            </a>
+            <p>
+                follow juga my ig=@shinzzei
+            </p>
         </div>
     </main>
 
@@ -398,11 +412,11 @@
         });
         
         function handleMenu(menuName) {
-            alert('Membuka ' + menuName + '. halaman akan segera hadi!');
+            alert('Membuka ' + menuName + '. halaman akan segera hadir!');
         }
         
         function logout() {
-            if(confirm('ingin keluar?')) {
+            if(confirm('cius pengen keluar?')) {
                 localStorage.removeItem('userData');
                 window.location.href = 'login-simple.html';
             }
@@ -410,31 +424,18 @@
         
         
         function loadUser() {
-    const userData = localStorage.getItem('userData');
-
-    if (!userData) {
-        alert("Silakan login dulu");
-        window.location.href = "loginpage.html";
-        return;
-    }
-
-    const user = JSON.parse(userData);
-
-    // TAMPILKAN DATA USER
-    document.getElementById('userName').textContent = user.nama;
-    document.getElementById('userId').textContent = 'ID: ' + user.idAnggota;
-    document.getElementById('userAvatar').textContent = user.nama.charAt(0).toUpperCase();
-
-    // CEK ADMIN KHUSUS (KAMU)
-    if (user.username === "nia") {
-        document.getElementById('welcomeText').textContent = 'SELAMAT DATANG ADMIN ' + user.nama.toUpperCase() + ' 👑';
-    } else {
-        document.getElementById('welcomeText').textContent = 'Halo, ' + user.nama + ' (Anggota)';
+            const userData = localStorage.getItem('userData');
+            if (userData) {
+                const user = JSON.parse(userData);
+                document.getElementById('userName').textContent = user.nama;
+                document.getElementById('userId').textContent = 'ID: ' + user.idAnggota;
+                document.getElementById('welcomeText').textContent = 'welcome, ' + user.nama + '!';
+                document.getElementById('userAvatar').textContent = user.nama.charAt(0).toUpperCase();
+            }
+        }
         
-        alert("Anda bukan admin!");
-        window.location.href = "loginpage.html";
-    }
-}
+        
+        loadUser();
     </script>
 </body>
 </html>
