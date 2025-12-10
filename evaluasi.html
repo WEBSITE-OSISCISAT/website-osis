@@ -23,46 +23,74 @@
     <div class="container">
         <h2>Form Evaluasi Kegiatan OSIS</h2>
 
-        <form action="simpan_evaluasi.php" method="POST" enctype="multipart/form-data">
+        <!-- Semua input TANPA <form> -->
+        <div id="evaluasi">
 
             <h3>Informasi Kegiatan</h3>
-            <input type="text" name="nama_kegiatan" placeholder="Nama kegiatan" required>
-            <input type="date" name="tanggal" required>
-            <input type="text" name="divisi" placeholder="Divisi penanggung jawab" required>
-            <input type="text" name="ketua_pelaksana" placeholder="Ketua Pelaksana" required>
-            <input type="number" name="anggota_osis" placeholder="anggota" required>
+            <input type="text" id="nama_kegiatan" placeholder="Nama kegiatan" required>
+            <input type="date" id="tanggal" required>
+            <input type="text" id="divisi" placeholder="Divisi penanggung jawab" required>
+            <input type="text" id="ketua_pelaksana" placeholder="Ketua Pelaksana" required>
+            <input type="number" id="anggota_osis" placeholder="anggota" required>
 
             <h3>Penilaian (1-5)</h3>
-            <select name="nilai_perencanaan">
+            <select id="nilai_perencanaan">
                 <option disabled selected>Perencanaan</option>
                 <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
             </select>
 
-            <select name="nilai_koordinasi">
+            <select id="nilai_koordinasi">
                 <option disabled selected>Koordinasi Panitia</option>
                 <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
             </select>
 
-
-            <select name="nilai_dokumentasi">
+            <select id="nilai_dokumentasi">
                 <option disabled selected>Dokumentasi</option>
                 <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
             </select>
 
-            <select name="nilai_keamanan">
+            <select id="nilai_keamanan">
                 <option disabled selected>Keamanan</option>
                 <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
             </select>
 
             <h3>Evaluasi</h3>
-            <textarea name="apa_yang_baik" placeholder="Hal yang berjalan baik"></textarea>
-            <textarea name="kendala" placeholder="Kendala kegiatan"></textarea>
-            <textarea name="solusi" placeholder="Solusi yang dilakukan"></textarea>
-            <textarea name="saran" placeholder="Saran untuk kegiatan berikutnya"></textarea>
-            <textarea name="kesimpulan" placeholder="Kesimpulan"></textarea>
+            <textarea id="apa_yang_baik" placeholder="Hal yang berjalan baik"></textarea>
+            <textarea id="kendala" placeholder="Kendala kegiatan"></textarea>
+            <textarea id="solusi" placeholder="Solusi yang dilakukan"></textarea>
+            <textarea id="saran" placeholder="Saran untuk kegiatan berikutnya"></textarea>
+            <textarea id="kesimpulan" placeholder="Kesimpulan"></textarea>
 
-            <button type="submit">Simpan Evaluasi</button>
-        </form>
+            <button onclick="simpanEvaluasi()">Simpan Evaluasi</button>
+        </div>
     </div>
+
+    <script>
+        function simpanEvaluasi() {
+            const data = {
+                nama_kegiatan: document.getElementById("nama_kegiatan").value,
+                tanggal: document.getElementById("tanggal").value,
+                divisi: document.getElementById("divisi").value,
+                ketua_pelaksana: document.getElementById("ketua_pelaksana").value,
+                anggota_osis: document.getElementById("anggota_osis").value,
+
+                nilai_perencanaan: document.getElementById("nilai_perencanaan").value,
+                nilai_koordinasi: document.getElementById("nilai_koordinasi").value,
+                nilai_dokumentasi: document.getElementById("nilai_dokumentasi").value,
+                nilai_keamanan: document.getElementById("nilai_keamanan").value,
+
+                apa_yang_baik: document.getElementById("apa_yang_baik").value,
+                kendala: document.getElementById("kendala").value,
+                solusi: document.getElementById("solusi").value,
+                saran: document.getElementById("saran").value,
+                kesimpulan: document.getElementById("kesimpulan").value
+            };
+
+            console.log(data); 
+            alert("Data evaluasi berhasil dikumpulkan! Lihat di console.");
+
+        }
+    </script>
+
 </body>
 </html>
