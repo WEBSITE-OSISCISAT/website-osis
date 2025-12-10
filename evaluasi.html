@@ -23,7 +23,6 @@
     <div class="container">
         <h2>Form Evaluasi Kegiatan OSIS</h2>
 
-        <!-- Semua input TANPA <form> -->
         <div id="evaluasi">
 
             <h3>Informasi Kegiatan</h3>
@@ -61,24 +60,22 @@
             <textarea id="saran" placeholder="Saran untuk kegiatan berikutnya"></textarea>
             <textarea id="kesimpulan" placeholder="Kesimpulan"></textarea>
 
-            <button onclick="simpanEvaluasi()">Simpan Evaluasi</button>
+            <button onclick="downloadJSON()">Simpan sebagai JSON</button>
         </div>
     </div>
 
     <script>
-        function simpanEvaluasi() {
+        function downloadJSON() {
             const data = {
                 nama_kegiatan: document.getElementById("nama_kegiatan").value,
                 tanggal: document.getElementById("tanggal").value,
                 divisi: document.getElementById("divisi").value,
                 ketua_pelaksana: document.getElementById("ketua_pelaksana").value,
                 anggota_osis: document.getElementById("anggota_osis").value,
-
                 nilai_perencanaan: document.getElementById("nilai_perencanaan").value,
                 nilai_koordinasi: document.getElementById("nilai_koordinasi").value,
                 nilai_dokumentasi: document.getElementById("nilai_dokumentasi").value,
                 nilai_keamanan: document.getElementById("nilai_keamanan").value,
-
                 apa_yang_baik: document.getElementById("apa_yang_baik").value,
                 kendala: document.getElementById("kendala").value,
                 solusi: document.getElementById("solusi").value,
@@ -86,9 +83,19 @@
                 kesimpulan: document.getElementById("kesimpulan").value
             };
 
-            console.log(data); 
-            alert("Data evaluasi berhasil dikumpulkan! Lihat di console.");
+            o
+            const jsonString = JSON.stringify(data, null, 4);
 
+           
+            const blob = new Blob([jsonString], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "evaluasi.json"; 
+            a.click();
+
+            URL.revokeObjectURL(url);
         }
     </script>
 
